@@ -92,3 +92,10 @@ export const PRICE_RANGE = {
 export const PRODUCT_CATEGORIES = [
   ...new Set(NEW_PRODUCTS.map((product) => product.category)),
 ]
+
+export function groupProductsByCategory(products: Product[]) {
+  return PRODUCT_CATEGORIES.map((category) => ({
+    category,
+    products: products.filter((product) => product.category === category),
+  })).filter((group) => group.products.length > 0)
+}

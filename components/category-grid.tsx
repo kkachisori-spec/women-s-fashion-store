@@ -16,8 +16,8 @@ export function CategoryGrid() {
     <section className="mx-auto max-w-7xl px-4 py-12 md:py-20">
       <div className="mb-10 flex items-end justify-between">
         <div>
-          <p className="mb-2 text-xs uppercase tracking-[0.3em] text-primary">Shop by category</p>
-          <h2 className="font-serif text-3xl font-light text-foreground md:text-4xl">카테고리</h2>
+          <p className="eyebrow mb-2">Shop by category</p>
+          <h2 className="section-title text-foreground">카테고리</h2>
         </div>
       </div>
 
@@ -38,8 +38,8 @@ export function CategoryGrid() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-foreground/50 via-transparent to-transparent" />
             <div className="absolute bottom-0 left-0 p-6">
-              <p className="text-xs uppercase tracking-[0.25em] text-background/80">{cat.caption}</p>
-              <h3 className="mt-1 font-serif text-2xl font-light text-background">{cat.label}</h3>
+              <p className="font-display text-[11px] font-normal uppercase tracking-[0.32em] text-background/80">{cat.caption}</p>
+              <h3 className="mt-1 font-serif text-2xl font-light tracking-[-0.02em] text-background">{cat.label}</h3>
             </div>
           </a>
         ))}

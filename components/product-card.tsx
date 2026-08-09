@@ -19,7 +19,7 @@ export function ProductCard({ product, showCategory = false }: ProductCardProps)
           className="object-cover transition-transform duration-700 group-hover:scale-105"
         />
         {product.tag && (
-          <span className="absolute left-3 top-3 bg-background/90 px-2.5 py-1 text-[10px] font-medium tracking-[0.15em] text-foreground">
+          <span className="absolute left-3 top-3 bg-background/90 px-2.5 py-1 text-[10px] font-normal tracking-[0.2em] text-foreground">
             {product.tag}
           </span>
         )}
@@ -33,10 +33,10 @@ export function ProductCard({ product, showCategory = false }: ProductCardProps)
       </div>
       <div className="mt-3">
         {showCategory && (
-          <p className="text-xs tracking-wide text-muted-foreground">{product.category}</p>
+          <p className="product-category">{product.category}</p>
         )}
-        <h3 className="text-sm text-foreground">{product.name}</h3>
-        <p className="mt-1 text-sm text-muted-foreground">₩ {product.price}</p>
+        <h3 className="product-name text-foreground">{product.name}</h3>
+        <p className="product-price mt-1">₩ {product.price}</p>
       </div>
     </article>
   )

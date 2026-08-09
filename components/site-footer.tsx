@@ -19,23 +19,23 @@ export function SiteFooter() {
       <div className="mx-auto max-w-7xl px-4 py-14">
         <div className="grid gap-10 md:grid-cols-4">
           <div>
-            <p className="font-serif text-xl font-medium tracking-[0.2em] text-foreground">
+            <p className="brand-logo text-foreground">
               MAISON ÉCLAT
             </p>
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
+            <p className="body-copy mt-4 max-w-xs text-[14px]">
               당신의 하루를 더 아름답게. 30대 여성을 위한 세련된 셀렉트숍.
             </p>
           </div>
 
           {FOOTER_COLUMNS.map((col) => (
             <div key={col.title}>
-              <h3 className="text-sm font-medium tracking-wide text-foreground">{col.title}</h3>
+              <h3 className="text-[13px] font-normal tracking-[0.1em] text-foreground">{col.title}</h3>
               <ul className="mt-4 flex flex-col gap-3">
                 {col.links.map((link) => (
                   <li key={link}>
                     <a
                       href="#"
-                      className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                      className="text-[13px] font-light tracking-[0.04em] text-muted-foreground transition-colors hover:text-primary"
                     >
                       {link}
                     </a>
@@ -46,7 +46,7 @@ export function SiteFooter() {
           ))}
         </div>
 
-        <div className="mt-12 flex flex-col gap-4 border-t border-border pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-12 flex flex-col gap-4 border-t border-border pt-6 text-[11px] font-light tracking-[0.06em] text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
           <p>© 2026 MAISON ÉCLAT. All rights reserved.</p>
           <div className="flex gap-6">
             <a href="#" className="transition-colors hover:text-primary">

@@ -25,9 +25,9 @@ export function PriceRangeSlider({ min, max, value, onChange }: PriceRangeSlider
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between text-sm">
+      <div className="flex items-center justify-between text-[13px] font-light tracking-[0.04em]">
         <span className="text-muted-foreground">가격 범위</span>
-        <span className="font-medium text-foreground">
+        <span className="font-normal text-foreground">
           ₩ {formatPrice(minValue)} - ₩ {formatPrice(maxValue)}
         </span>
       </div>
@@ -64,7 +64,7 @@ export function PriceRangeSlider({ min, max, value, onChange }: PriceRangeSlider
         />
       </div>
 
-      <div className="flex items-center justify-between text-xs text-muted-foreground">
+      <div className="flex items-center justify-between text-[11px] font-light tracking-[0.06em] text-muted-foreground">
         <span>₩ {formatPrice(min)}</span>
         <span>₩ {formatPrice(max)}</span>
       </div>

@@ -9,6 +9,7 @@ import {
   PRICE_RANGE,
   PRODUCT_CATEGORIES,
   formatPrice,
+  groupProductsByCategory,
   parsePrice,
   type ProductSort,
 } from "@/lib/products"
@@ -55,6 +56,10 @@ function isPriceRangeDefault(priceRange: [number, number]) {
   return priceRange[0] === PRICE_RANGE.min && priceRange[1] === PRICE_RANGE.max
 }
 
+function getCategorySectionId(category: string) {
+  return `category-${category.replace(/\s+/g, "-")}`
+}
+
 export function NewProductsList() {
   const [query, setQuery] = useState("")
   const [category, setCategory] = useState("all")
@@ -67,6 +72,11 @@ export function NewProductsList() {
   const filteredProducts = useMemo(
     () => filterAndSortProducts(NEW_PRODUCTS, query, category, sort, priceRange),
     [query, category, sort, priceRange],
+  )
+
+  const groupedProducts = useMemo(
+    () => groupProductsByCategory(filteredProducts),
+    [filteredProducts],
   )
 
   const hasActiveFilters =
@@ -86,12 +96,23 @@ export function NewProductsList() {
     setPriceRange([PRICE_RANGE.min, PRICE_RANGE.max])
   }
 
+  function handleCategorySelect(nextCategory: string) {
+    setCategory(nextCategory)
+
+    if (nextCategory !== "all") {
+      requestAnimationFrame(() => {
+        const target = document.getElementById(getCategorySectionId(nextCategory))
+        target?.scrollIntoView({ behavior: "smooth", block: "start" })
+      })
+    }
+  }
+
   return (
     <section className="mx-auto max-w-7xl px-4 py-12 md:py-20">
       <div className="mb-8 space-y-4 rounded-lg border border-border bg-background p-4 md:p-6">
         <form onSubmit={handleSearch} className="flex flex-col gap-4 lg:flex-row lg:items-end">
           <div className="flex-1">
-            <label htmlFor="product-search" className="mb-2 block text-sm text-foreground">
+            <label htmlFor="product-search" className="mb-2 block text-[13px] font-light tracking-[0.06em] text-foreground">
               상품 검색
             </label>
             <div className="relative">
@@ -102,50 +123,60 @@ export function NewProductsList() {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="상품명 또는 카테고리로 검색"
-                className="h-10 w-full rounded-lg border border-border bg-background pl-10 pr-4 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary"
+                className="h-10 w-full rounded-lg border border-border bg-background pl-10 pr-4 text-[13px] font-light tracking-[0.03em] text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary"
               />
             </div>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:w-auto lg:grid-cols-2">
-            <div>
-              <label htmlFor="product-category" className="mb-2 block text-sm text-foreground">
-                카테고리
-              </label>
-              <select
-                id="product-category"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="h-10 w-full min-w-[140px] rounded-lg border border-border bg-background px-3 text-sm text-foreground outline-none transition-colors focus:border-primary"
-              >
-                <option value="all">전체</option>
-                {PRODUCT_CATEGORIES.map((item) => (
-                  <option key={item} value={item}>
-                    {item}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label htmlFor="product-sort" className="mb-2 block text-sm text-foreground">
-                가격 정렬
-              </label>
-              <select
-                id="product-sort"
-                value={sort}
-                onChange={(e) => setSort(e.target.value as ProductSort)}
-                className="h-10 w-full min-w-[140px] rounded-lg border border-border bg-background px-3 text-sm text-foreground outline-none transition-colors focus:border-primary"
-              >
-                {SORT_OPTIONS.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+          <div>
+            <label htmlFor="product-sort" className="mb-2 block text-[13px] font-light tracking-[0.06em] text-foreground">
+              가격 정렬
+            </label>
+            <select
+              id="product-sort"
+              value={sort}
+              onChange={(e) => setSort(e.target.value as ProductSort)}
+              className="h-10 w-full min-w-[160px] rounded-lg border border-border bg-background px-3 text-[13px] font-light tracking-[0.03em] text-foreground outline-none transition-colors focus:border-primary"
+            >
+              {SORT_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
           </div>
         </form>
+
+        <div className="border-t border-border pt-4">
+          <p className="mb-3 text-[13px] font-light tracking-[0.06em] text-foreground">카테고리</p>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => handleCategorySelect("all")}
+              className={`btn-text border px-4 py-2 transition-colors ${
+                category === "all"
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "border-border bg-background text-foreground hover:border-primary hover:text-primary"
+              }`}
+            >
+              전체
+            </button>
+            {PRODUCT_CATEGORIES.map((item) => (
+              <button
+                key={item}
+                type="button"
+                onClick={() => handleCategorySelect(item)}
+                className={`btn-text border px-4 py-2 transition-colors ${
+                  category === item
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "border-border bg-background text-foreground hover:border-primary hover:text-primary"
+                }`}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+        </div>
 
         <div className="border-t border-border pt-4">
           <PriceRangeSlider
@@ -157,8 +188,14 @@ export function NewProductsList() {
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
-          <p className="text-sm text-muted-foreground">
-            총 <span className="font-medium text-foreground">{filteredProducts.length}</span>개 상품
+          <p className="text-[13px] font-light tracking-[0.04em] text-muted-foreground">
+            총 <span className="font-normal text-foreground">{filteredProducts.length}</span>개 상품
+            {category !== "all" && (
+              <span>
+                {" "}
+                · {category}
+              </span>
+            )}
             {query && (
               <span>
                 {" "}
@@ -176,7 +213,7 @@ export function NewProductsList() {
             <button
               type="button"
               onClick={handleReset}
-              className="text-sm text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline"
+              className="link-refined text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline"
             >
               필터 초기화
             </button>
@@ -185,21 +222,59 @@ export function NewProductsList() {
       </div>
 
       {filteredProducts.length > 0 ? (
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-6">
-          {filteredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} showCategory />
-          ))}
-        </div>
+        category === "all" ? (
+          <div className="space-y-16 md:space-y-20">
+            {groupedProducts.map(({ category: groupCategory, products }) => (
+              <section
+                key={groupCategory}
+                id={getCategorySectionId(groupCategory)}
+                className="scroll-mt-28"
+              >
+                <div className="mb-8 flex items-end justify-between border-b border-border pb-4">
+                  <div>
+                    <p className="product-category mb-2">{groupCategory}</p>
+                    <h2 className="section-title text-foreground">{groupCategory}</h2>
+                  </div>
+                  <p className="text-[13px] font-light tracking-[0.04em] text-muted-foreground">
+                    {products.length}개
+                  </p>
+                </div>
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-6">
+                  {products.map((product) => (
+                    <ProductCard key={product.id} product={product} showCategory={false} />
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
+        ) : (
+          <section id={getCategorySectionId(category)} className="scroll-mt-28">
+            <div className="mb-8 flex items-end justify-between border-b border-border pb-4">
+              <div>
+                <p className="product-category mb-2">{category}</p>
+                <h2 className="section-title text-foreground">{category}</h2>
+              </div>
+              <p className="text-[13px] font-light tracking-[0.04em] text-muted-foreground">
+                {filteredProducts.length}개
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-6">
+              {filteredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} showCategory={false} />
+              ))}
+            </div>
+          </section>
+        )
       ) : (
         <div className="rounded-lg border border-dashed border-border px-6 py-16 text-center">
-          <p className="font-serif text-2xl font-light text-foreground">검색 결과가 없습니다</p>
-          <p className="mt-3 text-sm text-muted-foreground">
+          <p className="section-title text-2xl text-foreground">검색 결과가 없습니다</p>
+          <p className="body-copy mt-3 text-[14px]">
             다른 검색어나 가격 범위로 다시 조회해 보세요.
           </p>
           <button
             type="button"
             onClick={handleReset}
-            className="mt-6 inline-flex items-center bg-primary px-5 py-2.5 text-sm tracking-wide text-primary-foreground transition-opacity hover:opacity-90"
+            className="btn-text mt-6 inline-flex items-center bg-primary px-5 py-2.5 text-primary-foreground transition-opacity hover:opacity-90"
           >
             전체 상품 보기
           </button>

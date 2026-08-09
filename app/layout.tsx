@@ -1,18 +1,27 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
-import { Noto_Sans_KR, Noto_Serif_KR } from 'next/font/google'
+import { Cormorant_Garamond, Noto_Sans_KR, Noto_Serif_KR } from 'next/font/google'
 import './globals.css'
 
 const notoSansKR = Noto_Sans_KR({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '700'],
+  weight: ['300', '400', '500'],
   variable: '--font-noto-sans-kr',
+  display: 'swap',
 })
 
 const notoSerifKR = Noto_Serif_KR({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600'],
+  weight: ['300', '400', '500'],
   variable: '--font-noto-serif-kr',
+  display: 'swap',
+})
+
+const cormorant = Cormorant_Garamond({
+  subsets: ['latin'],
+  weight: ['300', '400', '500'],
+  variable: '--font-cormorant',
+  display: 'swap',
 })
 
 export const metadata: Metadata = {
@@ -55,7 +64,7 @@ export default function RootLayout({
   return (
     <html
       lang="ko"
-      className={`bg-background ${notoSansKR.variable} ${notoSerifKR.variable}`}
+      className={`bg-background ${notoSansKR.variable} ${notoSerifKR.variable} ${cormorant.variable}`}
     >
       <body className="font-sans antialiased">
         {children}

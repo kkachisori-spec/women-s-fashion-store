@@ -18,7 +18,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
       {/* Announcement bar */}
       <div className="bg-primary text-primary-foreground">
-        <p className="mx-auto max-w-7xl px-4 py-2 text-center text-xs tracking-[0.15em]">
+        <p className="mx-auto max-w-7xl px-4 py-2 text-center text-[11px] font-light tracking-[0.22em]">
           첫 구매 시 10% 할인 · 5만원 이상 무료배송
         </p>
       </div>
@@ -38,7 +38,7 @@ export function SiteHeader() {
         {/* Brand */}
         <a
           href="/"
-          className="font-serif text-xl font-medium tracking-[0.2em] text-foreground md:text-2xl"
+          className="brand-logo text-foreground"
         >
           MAISON ÉCLAT
         </a>
@@ -49,7 +49,7 @@ export function SiteHeader() {
             <a
               key={link.label}
               href={link.href}
-              className="text-sm tracking-wide text-foreground/80 transition-colors hover:text-primary"
+              className="nav-link"
             >
               {link.label}
             </a>
@@ -89,7 +89,7 @@ export function SiteHeader() {
                 <a
                   href={link.href}
                   onClick={() => setMenuOpen(false)}
-                  className="block py-3 text-sm tracking-wide text-foreground/80 transition-colors hover:text-primary"
+                  className="nav-link block py-3"
                 >
                   {link.label}
                 </a>
